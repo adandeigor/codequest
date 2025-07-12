@@ -2,41 +2,62 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Crystal Quest 3D Game Design System - Vibrant cosmic theme */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Game Background - Deep space theme */
+    --background: 240 40% 8%;
+    --foreground: 50 90% 90%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Game UI Cards */
+    --card: 240 30% 12%;
+    --card-foreground: 50 90% 90%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 240 30% 12%;
+    --popover-foreground: 50 90% 90%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Game Primary - Electric Blue */
+    --primary: 220 100% 60%;
+    --primary-foreground: 240 40% 8%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Game Secondary - Cosmic Purple */
+    --secondary: 280 100% 70%;
+    --secondary-foreground: 240 40% 8%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Game Accent - Neon Green */
+    --accent: 120 100% 60%;
+    --accent-foreground: 240 40% 8%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Muted tones */
+    --muted: 240 20% 20%;
+    --muted-foreground: 50 30% 70%;
+
+    /* Game specific colors */
+    --crystal-blue: 200 100% 70%;
+    --crystal-purple: 280 100% 75%;
+    --crystal-pink: 320 100% 75%;
+    --crystal-gold: 45 100% 65%;
+    --crystal-green: 120 100% 65%;
+
+    /* Game gradients */
+    --gradient-cosmic: linear-gradient(135deg, hsl(280 100% 70%), hsl(220 100% 60%));
+    --gradient-crystal: linear-gradient(45deg, hsl(200 100% 70%), hsl(280 100% 75%));
+    --gradient-power: linear-gradient(90deg, hsl(120 100% 60%), hsl(45 100% 65%));
+
+    /* Game shadows and glows */
+    --glow-primary: 0 0 20px hsl(220 100% 60% / 0.5);
+    --glow-crystal: 0 0 30px hsl(280 100% 75% / 0.6);
+    --glow-accent: 0 0 15px hsl(120 100% 60% / 0.4);
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 240 30% 20%;
+    --input: 240 30% 15%;
+    --ring: 220 100% 60%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -56,33 +77,34 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    /* Enhanced dark mode for better game visibility */
+    --background: 240 50% 6%;
+    --foreground: 50 100% 95%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 240 40% 10%;
+    --card-foreground: 50 100% 95%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 240 40% 10%;
+    --popover-foreground: 50 100% 95%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 220 100% 70%;
+    --primary-foreground: 240 50% 6%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 280 100% 80%;
+    --secondary-foreground: 240 50% 6%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 120 100% 70%;
+    --accent-foreground: 240 50% 6%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --muted: 240 30% 15%;
+    --muted-foreground: 50 40% 80%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --border: 240 40% 15%;
+    --input: 240 40% 12%;
+    --ring: 220 100% 70%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
