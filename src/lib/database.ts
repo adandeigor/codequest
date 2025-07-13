@@ -158,9 +158,32 @@ class GameDatabase {
   async getPlayerData(): Promise<PlayerData | null> {
     await this.init();
     const stmt = this.db.prepare('SELECT * FROM player WHERE id = 1');
-    const result = stmt.getAsObject();
-    stmt.free();
-    return result as PlayerData || null;
+    
+    if (stmt.step()) {
+      const result = stmt.getAsObject();
+      stmt.free();
+      console.log('Player data found:', result);
+      return result as PlayerData;
+    } else {
+      stmt.free();
+      console.log('No player data found, creating default player');
+      // If no player exists, create one
+      this.db.run(`
+        INSERT INTO player (name, level, experience, crystalsCollected, totalScore)
+        VALUES ('Explorer', 1, 0, 0, 0)
+      `);
+      this.saveToLocalStorage();
+      
+      // Get the newly created player
+      const newStmt = this.db.prepare('SELECT * FROM player WHERE id = 1');
+      if (newStmt.step()) {
+        const newResult = newStmt.getAsObject();
+        newStmt.free();
+        return newResult as PlayerData;
+      }
+      newStmt.free();
+      return null;
+    }
   }
 
   async updatePlayerData(updates: Partial<PlayerData>) {
