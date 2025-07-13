@@ -43,15 +43,25 @@ class GameDatabase {
       const savedDb = localStorage.getItem('crystalquest_db');
       
       if (savedDb) {
-        const uint8Array = new Uint8Array(JSON.parse(savedDb));
-        this.db = new SQL.Database(uint8Array);
+        try {
+          const uint8Array = new Uint8Array(JSON.parse(savedDb));
+          this.db = new SQL.Database(uint8Array);
+          console.log('Loaded existing database from localStorage');
+        } catch (error) {
+          console.log('Failed to load saved database, creating new one');
+          this.db = new SQL.Database();
+          this.createTables();
+          this.initializeDefaultData();
+        }
       } else {
+        console.log('Creating new database');
         this.db = new SQL.Database();
         this.createTables();
         this.initializeDefaultData();
       }
 
       this.initialized = true;
+      console.log('Database initialized successfully');
     } catch (error) {
       console.error('Failed to initialize database:', error);
     }

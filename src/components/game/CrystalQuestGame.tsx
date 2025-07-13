@@ -20,9 +20,14 @@ const CrystalQuestGame: React.FC = () => {
   useEffect(() => {
     const initializeGame = async () => {
       try {
+        // Force database initialization first
+        await gameDatabase.init();
+        
         const player = await gameDatabase.getPlayerData();
         const crystalData = await gameDatabase.getCrystals();
         const achievementData = await gameDatabase.getAchievements();
+
+        console.log('Game data loaded:', { player, crystals: crystalData.length, achievements: achievementData.length });
 
         setPlayerData(player);
         setCrystals(crystalData);
