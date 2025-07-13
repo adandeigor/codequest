@@ -25,6 +25,9 @@ export interface Player {
   email?: string;
   avatar?: string;
   totalScore: number;
+  gamesPlayed: number;
+  wins: number;
+  losses: number;
   createdAt: Date;
   lastActive: Date;
 }

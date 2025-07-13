@@ -21,6 +21,9 @@ class GameDatabase {
       name,
       email,
       totalScore: 0,
+      gamesPlayed: 0,
+      wins: 0,
+      losses: 0,
       createdAt: new Date(),
       lastActive: new Date()
     };

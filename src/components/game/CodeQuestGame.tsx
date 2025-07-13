@@ -4,13 +4,16 @@ import { gameDB } from '@/lib/gameDatabase';
 import UniverseSelector from './UniverseSelector';
 import GameModeSelector from './GameModeSelector';
 import QuizGame from './QuizGame';
+import DuelGame from './DuelGame';
 import ResultsScreen from './ResultsScreen';
 import PlayerDashboard from './PlayerDashboard';
+import SettingsDialog from './SettingsDialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { User, Settings, Trophy } from 'lucide-react';
+import { multiplayerManager } from '@/lib/redisClient';
 
-type GameState = 'dashboard' | 'universe-select' | 'mode-select' | 'playing' | 'results';
+type GameState = 'dashboard' | 'universe-select' | 'mode-select' | 'playing' | 'duel' | 'results';
 
 const CodeQuestGame = () => {
   const [gameState, setGameState] = useState<GameState>('dashboard');
@@ -18,6 +21,8 @@ const CodeQuestGame = () => {
   const [currentSession, setCurrentSession] = useState<GameSession | null>(null);
   const [newBadges, setNewBadges] = useState<GameBadge[]>([]);
   const [showDashboard, setShowDashboard] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [duelRoomId, setDuelRoomId] = useState<string | null>(null);
 
   const universes = gameDB.getUniverses();
   const player = gameDB.getCurrentPlayer();
@@ -50,12 +55,21 @@ const CodeQuestGame = () => {
     setGameState('mode-select');
   };
 
-  const handleModeSelect = (mode: 'solo' | 'duel' | 'league' | 'tournament') => {
+  const handleModeSelect = async (mode: 'solo' | 'duel' | 'league' | 'tournament') => {
     if (!selectedUniverse || !player) return;
 
-    const session = gameDB.createGameSession(player.id, selectedUniverse.id, mode, 'normal');
-    setCurrentSession(session);
-    setGameState('playing');
+    if (mode === 'duel') {
+      // Create or join a duel room
+      const roomId = await multiplayerManager.createDuelRoom(player.id, selectedUniverse.id);
+      setDuelRoomId(roomId);
+      const session = gameDB.createGameSession(player.id, selectedUniverse.id, mode, 'normal');
+      setCurrentSession(session);
+      setGameState('duel');
+    } else {
+      const session = gameDB.createGameSession(player.id, selectedUniverse.id, mode, 'normal');
+      setCurrentSession(session);
+      setGameState('playing');
+    }
   };
 
   const handleGameComplete = (session: GameSession) => {
@@ -138,7 +152,11 @@ const CodeQuestGame = () => {
                   <Button variant="ghost" size="sm">
                     <Trophy className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="sm">
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    onClick={() => setShowSettings(true)}
+                  >
                     <Settings className="h-4 w-4" />
                   </Button>
                 </>
@@ -239,6 +257,15 @@ const CodeQuestGame = () => {
           />
         )}
 
+        {gameState === 'duel' && currentSession && duelRoomId && (
+          <DuelGame 
+            session={currentSession}
+            roomId={duelRoomId}
+            onComplete={handleGameComplete}
+            onExit={handleBackToMenu}
+          />
+        )}
+
         {gameState === 'results' && currentSession && (
           <ResultsScreen 
             session={currentSession}
@@ -248,6 +275,13 @@ const CodeQuestGame = () => {
           />
         )}
       </main>
+
+      {/* Settings Dialog */}
+      <SettingsDialog 
+        open={showSettings}
+        onOpenChange={setShowSettings}
+        player={player}
+      />
     </div>
   );
 };
