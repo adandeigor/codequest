@@ -1,7 +1,7 @@
-import CrystalQuestGame from '@/components/game/CrystalQuestGame';
+import CodeQuestGame from '@/components/game/CodeQuestGame';
 
 const Index = () => {
-  return <CrystalQuestGame />;
+  return <CodeQuestGame />;
 };
 
 export default Index;
