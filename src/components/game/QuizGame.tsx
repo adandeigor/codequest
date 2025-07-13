@@ -31,10 +31,16 @@ const QuizGame = ({ session, onComplete, onExit }: QuizGameProps) => {
     const timer = setInterval(() => {
       setTimeLeft(prev => {
         if (prev <= 1) {
-          // Ne pas donner de points quand le temps expire
+          // Time's up - just show result without selecting answer
           setSelectedAnswer(null);
           setIsCorrect(false);
           setShowResult(true);
+          
+          // Auto advance after 3 seconds
+          setTimeout(() => {
+            handleNext();
+          }, 3000);
+          
           return 0;
         }
         return prev - 1;
@@ -195,6 +201,11 @@ const QuizGame = ({ session, onComplete, onExit }: QuizGameProps) => {
                       <Star className="h-6 w-6" />
                       Excellente réponse !
                     </>
+                  ) : selectedAnswer === null ? (
+                    <>
+                      <Clock className="h-6 w-6" />
+                      Temps écoulé !
+                    </>
                   ) : (
                     <>
                       <XCircle className="h-6 w-6" />
@@ -204,8 +215,15 @@ const QuizGame = ({ session, onComplete, onExit }: QuizGameProps) => {
                 </div>
 
                 <div className="bg-muted/50 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Explication :</h4>
-                  <p className="text-muted-foreground">{currentQuestion.explanation}</p>
+                  <h4 className="font-semibold mb-2">
+                    {selectedAnswer === null ? 'La bonne réponse était :' : 'Explication :'}
+                  </h4>
+                  <p className="text-muted-foreground">
+                    {selectedAnswer === null 
+                      ? `${String.fromCharCode(65 + currentQuestion.correctAnswer)} - ${currentQuestion.options[currentQuestion.correctAnswer]}. ${currentQuestion.explanation}`
+                      : currentQuestion.explanation
+                    }
+                  </p>
                 </div>
 
                 <Button 

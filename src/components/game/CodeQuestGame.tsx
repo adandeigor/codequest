@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Universe, GameSession, Badge as GameBadge } from '@/types/game';
+import { Universe, GameSession, Badge as GameBadge, Player } from '@/types/game';
 import { gameDB } from '@/lib/gameDatabase';
 import UniverseSelector from './UniverseSelector';
 import GameModeSelector from './GameModeSelector';
@@ -15,7 +15,11 @@ import { multiplayerManager } from '@/lib/redisClient';
 
 type GameState = 'dashboard' | 'universe-select' | 'mode-select' | 'playing' | 'duel' | 'results';
 
-const CodeQuestGame = () => {
+interface CodeQuestGameProps {
+  player: Player;
+}
+
+export const CodeQuestGame = ({ player }: CodeQuestGameProps) => {
   const [gameState, setGameState] = useState<GameState>('dashboard');
   const [selectedUniverse, setSelectedUniverse] = useState<Universe | null>(null);
   const [currentSession, setCurrentSession] = useState<GameSession | null>(null);
@@ -25,7 +29,6 @@ const CodeQuestGame = () => {
   const [duelRoomId, setDuelRoomId] = useState<string | null>(null);
 
   const universes = gameDB.getUniverses();
-  const player = gameDB.getCurrentPlayer();
 
   // Initialize player stats for all universes
   useEffect(() => {
@@ -286,4 +289,3 @@ const CodeQuestGame = () => {
   );
 };
 
-export default CodeQuestGame;

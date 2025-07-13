@@ -271,12 +271,7 @@ class GameDatabase {
   }
 
   private initializeDefaults(): void {
-    // Create default player if none exists
-    if (this.players.size === 0) {
-      this.createPlayer('Joueur 1');
-    }
-
-    // Create default leagues
+    // Create default leagues only if needed
     if (this.leagues.size === 0) {
       universes.slice(0, 5).forEach(universe => {
         this.createLeague(universe.id, 1);
@@ -284,9 +279,18 @@ class GameDatabase {
     }
   }
 
-  // Get current player (first player for now)
+  // Get current player
   getCurrentPlayer(): Player | undefined {
-    return Array.from(this.players.values())[0];
+    const storedPlayerId = localStorage.getItem('current_player_id');
+    if (storedPlayerId && this.players.has(storedPlayerId)) {
+      return this.players.get(storedPlayerId);
+    }
+    return undefined;
+  }
+
+  // Set current player
+  setCurrentPlayer(playerId: string): void {
+    localStorage.setItem('current_player_id', playerId);
   }
 
   resetGame(): void {
